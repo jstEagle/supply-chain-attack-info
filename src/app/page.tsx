@@ -1,101 +1,133 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
     return (
-        <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-                <Image
-                    className="dark:invert"
-                    src="/next.svg"
-                    alt="Next.js logo"
-                    width={180}
-                    height={38}
-                    priority
-                />
-                <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-                    <li className="mb-2 tracking-[-.01em]">
-                        Get started by editing{" "}
-                        <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-                            src/app/page.tsx
-                        </code>
-                        .
-                    </li>
-                    <li className="tracking-[-.01em]">Testing</li>
-                </ol>
+        <div className="space-y-16">
+            <section className="relative overflow-hidden rounded-2xl px-6 py-16 sm:px-12 glass soft-shadow">
+                <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 bg-cyan-400/30 blur-3xl rounded-full" />
+                <div className="absolute -bottom-24 right-1/2 translate-x-1/2 h-72 w-72 bg-fuchsia-400/20 blur-3xl rounded-full" />
+                <div className="mx-auto max-w-3xl text-center space-y-6 relative">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[12px] uppercase tracking-wide">
+                        <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                        Live Monitor
+                    </div>
+                    <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
+                        Supply Chain Attack Tracker
+                    </h1>
+                    <p className="text-base sm:text-lg/7 opacity-90 max-w-3xl mx-auto">
+                        A major supply chain attack on multiple npm packages
+                        redirected crypto deposits to attacker-owned addresses
+                        across several chains. This dashboard aggregates the
+                        proceeds and surfaces a transparent breakdown by chain
+                        and transaction.
+                    </p>
+                    <div className="flex items-center justify-center gap-4">
+                        <Link
+                            href="/stolen"
+                            className="px-6 py-3 rounded-full glass soft-shadow text-base font-semibold"
+                        >
+                            View Stolen Funds
+                        </Link>
+                    </div>
+                </div>
+            </section>
 
-                <div className="flex gap-4 items-center flex-col sm:flex-row">
+            <section className="mx-auto max-w-3xl">
+                <div className="rounded-2xl glass soft-shadow p-8 sm:p-10 space-y-5">
+                    <h2 className="text-2xl font-semibold tracking-tight text-center">
+                        Incident breakdown
+                    </h2>
+                    <p className="text-base/7 opacity-80 text-center">
+                        A recent supply chain attack compromised a reputable
+                        developer&rsquo;s NPM account, injecting malicious code
+                        into widely used JavaScript packages, affecting over 1
+                        billion downloads.
+                    </p>
+                    <div className="space-y-3 text-base/7 opacity-90">
+                        <p>
+                            The malware targets cryptocurrency wallets,
+                            potentially swapping wallet addresses during
+                            transactions to steal funds. Ledger&rsquo;s CTO,
+                            Charles Guillemet, advised users to verify
+                            transactions carefully and avoid on-chain
+                            transactions with software wallets until resolved.
+                        </p>
+                        <p>
+                            The malicious packages have been disabled, and
+                            developers are urged to audit dependencies to
+                            prevent further impact.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="space-y-7 mx-auto max-w-5xl">
+                <div className="text-center space-y-3">
+                    <h2 className="text-xl font-semibold">
+                        Coverage and analysis
+                    </h2>
+                    <p className="text-base opacity-70">
+                        Curated articles and threads tracking the investigation.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-10">
                     <a
-                        className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+                        href="https://news.ycombinator.com/item?id=45169657&trk=public_post_comment-text"
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noreferrer"
+                        className="rounded-xl glass soft-shadow p-5 hover:bg-white/10 transition"
                     >
-                        <Image
-                            className="dark:invert"
-                            src="/vercel.svg"
-                            alt="Vercel logomark"
-                            width={20}
-                            height={20}
-                        />
-                        Deploy now
+                        <div className="text-base font-semibold">
+                            Hacker News thread
+                        </div>
+                        <div className="text-sm opacity-80">
+                            Read the DEVs perspective and see where it started.
+                        </div>
+                        <div className="text-sm opacity-70 mt-3">Read →</div>
                     </a>
                     <a
-                        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-                        href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+                        href="https://npmdiff.dev/simple-swizzle/0.2.2/0.2.3/package/index.js/"
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noreferrer"
+                        className="rounded-xl glass soft-shadow p-5 hover:bg-white/10 transition"
                     >
-                        Read our docs
+                        <div className="text-base font-semibold">
+                            See the actual package diff.
+                        </div>
+                        <div className="text-sm opacity-80">
+                            For all the DEVs out there, see the actual package
+                            diff.
+                        </div>
+                        <div className="text-sm opacity-70 mt-3">Read →</div>
+                    </a>
+                    <a
+                        href="https://www.aikido.dev/blog/npm-debug-and-chalk-packages-compromised"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl glass soft-shadow p-5 hover:bg-white/10 transition"
+                    >
+                        <div className="text-base font-semibold">Aikido</div>
+                        <div className="text-sm opacity-80">
+                            Good coverage of the incident. Recommend a read.
+                        </div>
+                        <div className="text-sm opacity-70 mt-3">Read →</div>
+                    </a>
+                    <a
+                        href="https://www.securityalliance.org/news/2025-09-npm-supply-chain"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl glass soft-shadow p-5 hover:bg-white/10 transition"
+                    >
+                        <div className="text-base font-semibold">
+                            Security Alliance
+                        </div>
+                        <div className="text-sm opacity-80">
+                            More good coverage of the incident.
+                        </div>
+                        <div className="text-sm opacity-70 mt-3">Read →</div>
                     </a>
                 </div>
-            </main>
-            <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/file.svg"
-                        alt="File icon"
-                        width={16}
-                        height={16}
-                    />
-                    Learn
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/window.svg"
-                        alt="Window icon"
-                        width={16}
-                        height={16}
-                    />
-                    Examples
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/globe.svg"
-                        alt="Globe icon"
-                        width={16}
-                        height={16}
-                    />
-                    Go to nextjs.org →
-                </a>
-            </footer>
+            </section>
         </div>
     );
 }
