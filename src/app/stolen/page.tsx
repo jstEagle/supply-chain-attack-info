@@ -132,7 +132,7 @@ function ClientStolen() {
     if (error) return <div className="text-red-600">Failed to load.</div>;
 
     return (
-        <div className="space-y-8">
+        <div className="mx-auto max-w-5xl space-y-8">
             <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold">Stolen funds</h1>
