@@ -13,8 +13,15 @@ export const litecoinAdapter: ChainAdapter = {
                 { cache: "no-store" }
             );
             if (!resp.ok) return [];
-            const json = await resp.json().catch(() => ({} as any));
-            const data = (json as any)?.data?.[address];
+            const json = (await resp.json().catch(() => ({} as unknown))) as {
+                data?: Record<
+                    string,
+                    {
+                        transactions?: string[];
+                    }
+                >;
+            };
+            const data = json?.data?.[address];
             const txs: NormalizedTransaction[] = [];
             const txHashes: string[] = data?.transactions || [];
             for (const hash of txHashes.slice(0, 20)) {
@@ -23,15 +30,28 @@ export const litecoinAdapter: ChainAdapter = {
                     { cache: "no-store" }
                 );
                 if (!txResp.ok) continue;
-                const raw = await txResp.json().catch(() => ({} as any));
+                const raw = (await txResp
+                    .json()
+                    .catch(() => ({} as unknown))) as {
+                    data?: Record<
+                        string,
+                        {
+                            decoded_raw_transaction?: {
+                                vout?: Array<{
+                                    value?: number | string;
+                                    scriptPubKey?: { addresses?: string[] };
+                                }>;
+                            };
+                        }
+                    >;
+                };
                 const outs =
-                    (raw as any)?.data?.[hash]?.decoded_raw_transaction?.vout ||
-                    [];
+                    raw?.data?.[hash]?.decoded_raw_transaction?.vout || [];
                 for (const o of outs) {
                     const addresses: string[] =
-                        (o as any)?.scriptPubKey?.addresses || [];
+                        o?.scriptPubKey?.addresses || [];
                     if (addresses.includes(address)) {
-                        const amount = Number((o as any).value || 0);
+                        const amount = Number(o.value || 0);
                         txs.push({
                             chain: "litecoin",
                             txid: hash,

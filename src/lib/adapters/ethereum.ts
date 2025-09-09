@@ -13,23 +13,29 @@ export const ethereumAdapter: ChainAdapter = {
                 { cache: "no-store" }
             );
             if (!resp.ok) return [];
-            const json = await resp.json().catch(() => ({} as any));
-            const items = (json as any)?.items || [];
-            const txs: NormalizedTransaction[] = (items as any[]).map(
-                (it: any) => ({
-                    chain: "ethereum",
-                    txid: it.hash,
-                    from: it.from?.hash,
-                    to: it.to?.hash || address,
-                    amount: Number(it.value || 0) / 1e18,
-                    symbol: "ETH",
-                    timestamp: it.timestamp
-                        ? Math.floor(new Date(it.timestamp).getTime() / 1000)
-                        : undefined,
-                    explorerUrl: `https://etherscan.io/tx/${it.hash}`,
-                    addressMatched: address,
-                })
-            );
+            const json = (await resp.json().catch(() => ({} as unknown))) as {
+                items?: Array<{
+                    hash: string;
+                    from?: { hash?: string };
+                    to?: { hash?: string };
+                    value?: string | number;
+                    timestamp?: string | number;
+                }>;
+            };
+            const items = json?.items || [];
+            const txs: NormalizedTransaction[] = items.map((it) => ({
+                chain: "ethereum",
+                txid: it.hash,
+                from: it.from?.hash,
+                to: it.to?.hash || address,
+                amount: Number(it.value || 0) / 1e18,
+                symbol: "ETH",
+                timestamp: it.timestamp
+                    ? Math.floor(new Date(it.timestamp).getTime() / 1000)
+                    : undefined,
+                explorerUrl: `https://etherscan.io/tx/${it.hash}`,
+                addressMatched: address,
+            }));
             return txs;
         } catch {
             return [];

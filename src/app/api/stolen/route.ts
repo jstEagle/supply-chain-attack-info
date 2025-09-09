@@ -55,7 +55,7 @@ export async function GET() {
             "public, s-maxage=300, stale-while-revalidate=600"
         );
         return res;
-    } catch (e) {
+    } catch {
         const res = NextResponse.json(
             { error: "failed_to_fetch", message: "Error fetching chain data" },
             { status: 500 }

@@ -12,7 +12,7 @@ export function aggregateTotals(txs: NormalizedTransaction[]): ChainTotals[] {
         tron: { chain: "tron", symbol: "TRX", totalReceived: 0 },
         solana: { chain: "solana", symbol: "SOL", totalReceived: 0 },
         litecoin: { chain: "litecoin", symbol: "LTC", totalReceived: 0 },
-    } as any;
+    };
 
     for (const t of txs) {
         byChain[t.chain].totalReceived += t.amount;

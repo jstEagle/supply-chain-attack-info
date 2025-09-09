@@ -13,17 +13,33 @@ export const solanaAdapter: ChainAdapter = {
                 { cache: "no-store" }
             );
             if (!resp.ok) return [];
-            const json = await resp.json().catch(() => [] as any);
+            const json = (await resp
+                .json()
+                .catch(() => [] as unknown)) as unknown[];
             const txs: NormalizedTransaction[] = [];
-            for (const tx of Array.isArray(json) ? json : []) {
-                const transfers =
-                    (tx as any).parsedInstruction?.filter?.(
-                        (i: any) => i.type === "transfer"
-                    ) || [];
+            for (const entry of Array.isArray(json) ? json : []) {
+                type Transfer = {
+                    type?: string;
+                    params?: {
+                        destination?: string;
+                        source?: string;
+                        amount?: string | number;
+                    };
+                };
+                type SolTx = {
+                    parsedInstruction?: Transfer[];
+                    txHash?: string;
+                    blockTime?: number;
+                };
+                const tx = entry as SolTx;
+                const transfers = (tx.parsedInstruction || []).filter(
+                    (i) => i.type === "transfer"
+                );
                 for (const t of transfers) {
                     if (t?.params?.destination === address) {
                         const lamports = Number(t?.params?.amount || 0);
-                        const txHash = (tx as any).txHash;
+                        const txHash = tx.txHash;
+                        if (!txHash) continue;
                         txs.push({
                             chain: "solana",
                             txid: txHash,
@@ -31,10 +47,8 @@ export const solanaAdapter: ChainAdapter = {
                             to: address,
                             amount: lamports / 1e9,
                             symbol: "SOL",
-                            timestamp: (tx as any).blockTime,
-                            explorerUrl: txHash
-                                ? `https://solscan.io/tx/${txHash}`
-                                : undefined,
+                            timestamp: tx.blockTime,
+                            explorerUrl: `https://solscan.io/tx/${txHash}`,
                             addressMatched: address,
                         });
                     }

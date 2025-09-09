@@ -13,19 +13,39 @@ export const bitcoinAdapter: ChainAdapter = {
                 { cache: "no-store" }
             );
             if (!resp.ok) return [];
-            const data = await resp.json().catch(() => []);
+            const data = await resp.json().catch(() => [] as unknown);
+
+            type BlockstreamVout = {
+                scriptpubkey_address?: string;
+                value?: number;
+            };
+            type BlockstreamOut = { address?: string; satoshis?: number };
+            type BlockstreamTx = {
+                txid?: string;
+                hash?: string;
+                time?: number;
+                status?: { block_time?: number };
+                vout?: BlockstreamVout[];
+                out?: BlockstreamOut[];
+            };
+
             const txs: NormalizedTransaction[] = [];
-            for (const tx of Array.isArray(data) ? data : []) {
-                const outs = Array.isArray((tx as any).vout)
-                    ? (tx as any).vout
-                    : (tx as any).out || [];
+            const arr = Array.isArray(data) ? (data as unknown[]) : [];
+            for (const entry of arr) {
+                const tx = entry as BlockstreamTx;
+                const outs: Array<BlockstreamVout | BlockstreamOut> =
+                    Array.isArray(tx.vout) ? tx.vout! : tx.out ?? [];
                 for (const o of outs) {
-                    const scriptpubkey_address =
-                        (o as any).scriptpubkey_address || (o as any).address;
-                    if (scriptpubkey_address === address) {
-                        const amountSats =
-                            (o as any).value ?? (o as any).satoshis ?? 0;
-                        const txid = (tx as any).txid || (tx as any).hash;
+                    const out = o as Partial<BlockstreamVout & BlockstreamOut>;
+                    const toAddr = out.scriptpubkey_address ?? out.address;
+                    if (toAddr === address) {
+                        const amountSats = (out.value ??
+                            out.satoshis ??
+                            0) as number;
+                        const txid = tx.txid ?? tx.hash;
+                        if (!txid) {
+                            continue;
+                        }
                         txs.push({
                             chain: "bitcoin",
                             txid,
@@ -33,12 +53,8 @@ export const bitcoinAdapter: ChainAdapter = {
                             amount: Number(amountSats) / 1e8,
                             symbol: "BTC",
                             timestamp:
-                                (tx as any).status?.block_time ||
-                                (tx as any).time ||
-                                undefined,
-                            explorerUrl: txid
-                                ? `https://blockstream.info/tx/${txid}`
-                                : undefined,
+                                tx.status?.block_time ?? tx.time ?? undefined,
+                            explorerUrl: `https://blockstream.info/tx/${txid}`,
                             addressMatched: address,
                         });
                     }
